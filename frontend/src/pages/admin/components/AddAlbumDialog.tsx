@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
+import { useMusicStore } from "@/stores/useMusicStore";
 import { Plus, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const AddAlbumDialog = () => {
+	const {fetchAlbums} = useMusicStore();
 	const [albumDialogOpen, setAlbumDialogOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +65,7 @@ const AddAlbumDialog = () => {
 			setImageFile(null);
 			setAlbumDialogOpen(false);
 			toast.success("Album created successfully");
+			await fetchAlbums(); // Refresh the album list
 		} catch (error: any) {
 			toast.error("Failed to create album: " + error.message);
 		} finally {
